@@ -16,6 +16,8 @@ public class MainActivity extends AppCompatActivity {
     public LoopView loopViewNoDesR;
     public LoopView loopViewNoDesC;
     public List<LoopViewEntity> list = new ArrayList<>();
+    public List<LoopViewEntity> list_no_r = new ArrayList<>();
+    public List<LoopViewEntity> list_no_c = new ArrayList<>();
     public String[] urls = new String[]{"http://upload.cankaoxiaoxi.com/2016/0808/1470616024923.jpg"
             , "http://upload.cankaoxiaoxi.com/2016/0808/1470632912173.jpg"
             , "http://upload.cankaoxiaoxi.com/2016/0808/1470638161683.jpg"
@@ -51,7 +53,13 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        loopViewNoDesR.setLoopData(list);
+        for (int i = 0; i < urls.length - 1; i++) {
+            LoopViewEntity entity = new LoopViewEntity();
+            entity.setImageUrl(urls[i]);
+            entity.setDescript(descripts[i]);
+            list_no_r.add(entity);
+        }
+        loopViewNoDesR.setLoopData(list_no_r);
         loopViewNoDesR.setOnItemClickListener(new LoopView.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
@@ -60,7 +68,13 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        loopViewNoDesC.setLoopData(list);
+        for (int i = 0; i < urls.length - 2; i++) {
+            LoopViewEntity entity = new LoopViewEntity();
+            entity.setImageUrl(urls[i]);
+            entity.setDescript(descripts[i]);
+            list_no_c.add(entity);
+        }
+        loopViewNoDesC.setLoopData(list_no_c);
         loopViewNoDesC.setOnItemClickListener(new LoopView.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {

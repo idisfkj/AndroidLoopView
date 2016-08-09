@@ -11,6 +11,13 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <TextView
+            android:padding="5dp"
+            android:layout_gravity="center"
+            android:text="有描述"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
 
         <com.idisfkj.loopview.LoopView
             android:id="@+id/loop_view"
@@ -21,6 +28,13 @@
 
         </com.idisfkj.loopview.LoopView>
 
+        <TextView
+            android:padding="5dp"
+            android:layout_gravity="center"
+            android:text="无描述,显示居右"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
         <com.idisfkj.loopview.LoopView
             android:id="@+id/loop_view_no_des_r"
             android:layout_width="match_parent"
@@ -29,6 +43,13 @@
             loop:rate="4">
 
         </com.idisfkj.loopview.LoopView>
+
+        <TextView
+            android:padding="5dp"
+            android:layout_gravity="center"
+            android:text="无描述,显示居中"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <com.idisfkj.loopview.LoopView
             android:id="@+id/loop_view_no_des_c"
