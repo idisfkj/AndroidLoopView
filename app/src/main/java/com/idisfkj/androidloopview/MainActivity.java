@@ -13,6 +13,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     public LoopView loopView;
+    public LoopView loopViewNoDesR;
+    public LoopView loopViewNoDesC;
     public List<LoopViewEntity> list = new ArrayList<>();
     public String[] urls = new String[]{"http://upload.cankaoxiaoxi.com/2016/0808/1470616024923.jpg"
             , "http://upload.cankaoxiaoxi.com/2016/0808/1470632912173.jpg"
@@ -23,14 +25,17 @@ public class MainActivity extends AppCompatActivity {
             , "姐弟恋！吴敏霞男友身份曝光 就职于田径协会"
             , "里约奥组委承认中国国旗错误：正在解决"};
     public String[] detailUrls = new String[]{"http://www.cankaoxiaoxi.com/roll10/bd/20160808/1260093.shtml?bdnews"
-            ,"http://www.cankaoxiaoxi.com/roll10/bd/20160808/1260518.shtml?bdnews"
-            ,"http://www.cankaoxiaoxi.com/roll10/bd/20160808/1260643.shtml?bdnews"
-            ,"http://wenhua.cjn.cn/dxxl/it/201608/00069631.html"};
+            , "http://www.cankaoxiaoxi.com/roll10/bd/20160808/1260518.shtml?bdnews"
+            , "http://www.cankaoxiaoxi.com/roll10/bd/20160808/1260643.shtml?bdnews"
+            , "http://wenhua.cjn.cn/dxxl/it/201608/00069631.html"};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         loopView = (LoopView) findViewById(R.id.loop_view);
+        loopViewNoDesR = (LoopView) findViewById(R.id.loop_view_no_des_r);
+        loopViewNoDesC = (LoopView) findViewById(R.id.loop_view_no_des_c);
         for (int i = 0; i < urls.length; i++) {
             LoopViewEntity entity = new LoopViewEntity();
             entity.setImageUrl(urls[i]);
@@ -39,6 +44,24 @@ public class MainActivity extends AppCompatActivity {
         }
         loopView.setLoopData(list);
         loopView.setOnItemClickListener(new LoopView.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Intent intent = new Intent(MainActivity.this, ItemDetailActivity.class);
+                intent.putExtra("url", detailUrls[position]);
+                startActivity(intent);
+            }
+        });
+        loopViewNoDesR.setLoopData(list);
+        loopViewNoDesR.setOnItemClickListener(new LoopView.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Intent intent = new Intent(MainActivity.this, ItemDetailActivity.class);
+                intent.putExtra("url", detailUrls[position]);
+                startActivity(intent);
+            }
+        });
+        loopViewNoDesC.setLoopData(list);
+        loopViewNoDesC.setOnItemClickListener(new LoopView.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 Intent intent = new Intent(MainActivity.this, ItemDetailActivity.class);

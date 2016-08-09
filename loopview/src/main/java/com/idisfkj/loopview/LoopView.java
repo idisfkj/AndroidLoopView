@@ -154,7 +154,8 @@ public class LoopView extends FrameLayout implements ViewPager.OnPageChangeListe
                 pauseLoop();
                 break;
             case MotionEvent.ACTION_UP:
-                startLoop();
+                if (mSes.isShutdown())
+                    startLoop();
                 break;
         }
         return false;
