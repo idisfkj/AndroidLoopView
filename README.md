@@ -76,7 +76,7 @@ loopView.setOnItemClickListener(new LoopView.OnItemClickListener() {
 ```
 # 详情
 
-![LoopView-循环轮播控件](http://idisfkj.github.io/2016/08/09/LoopView-%E5%BE%AA%E7%8E%AF%E8%BD%AE%E6%92%AD%E6%8E%A7%E4%BB%B6/)
+[LoopView-循环轮播控件](http://idisfkj.github.io/2016/08/09/LoopView-%E5%BE%AA%E7%8E%AF%E8%BD%AE%E6%92%AD%E6%8E%A7%E4%BB%B6/)
 
 # License
 
