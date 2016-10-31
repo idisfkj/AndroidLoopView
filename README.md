@@ -12,7 +12,7 @@
 <dependency>
   <groupId>com.idisfkj.loopview</groupId>
   <artifactId>loopview</artifactId>
-  <version>1.0.1</version>
+  <version>2.0.0</version>
   <type>pom</type>
 </dependency>
 ```
@@ -20,7 +20,7 @@
 ### Gradle
 
 ```
-compile 'com.idisfkj.loopview:loopview:1.0.1'
+compile 'com.idisfkj.loopview:loopview:2.0.0'
 ```
 
 >*根据自己的需求添加依赖*
@@ -51,6 +51,13 @@ xmlns:loop="http://schemas.android.com/apk/res-auto"
 
 `rate`代表轮播的速度，`单位为s`,默认为3s
 
+## 设置默认图片
+
+```
+loopView.setDefaultImageView(xxx);
+loopView.setErrorImageView(xxx);
+```
+
 ## 填充数据
 填充数据需要借助`LoopViewEntity`实体类来存储,例如：
 
@@ -76,7 +83,7 @@ loopView.setOnItemClickListener(new LoopView.OnItemClickListener() {
 ```
 # 详情
 
-[LoopView-循环轮播控件](http://idisfkj.github.io/2016/08/09/LoopView-%E5%BE%AA%E7%8E%AF%E8%BD%AE%E6%92%AD%E6%8E%A7%E4%BB%B6/)
+[LoopView-循环轮播控件](https://idisfkj.github.io/2016/08/09/LoopView-%E5%BE%AA%E7%8E%AF%E8%BD%AE%E6%92%AD%E6%8E%A7%E4%BB%B6/)
 
 # License
 

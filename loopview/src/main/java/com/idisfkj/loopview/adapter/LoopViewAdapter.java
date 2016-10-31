@@ -21,6 +21,9 @@ public class LoopViewAdapter extends PagerAdapter {
     private List<LoopViewEntity> list;
     private Context context;
     private OnItemClickListener listener;
+    private final int MAX_SIZE = Integer.MAX_VALUE;
+    private int defaultImageView;
+    private int errorImageView;
 
     public LoopViewAdapter(Context context, List<LoopViewEntity> list) {
         this.context = context;
@@ -29,7 +32,7 @@ public class LoopViewAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        return list.size();
+        return MAX_SIZE;
     }
 
     @Override
@@ -46,15 +49,15 @@ public class LoopViewAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, final int position) {
         View view = LayoutInflater.from(context).inflate(R.layout.loopview_item, null);
         ImageView imageView = (ImageView) view.findViewById(R.id.loop_image);
-        Glide.with(context).load(list.get(position).getImageUrl())
+        Glide.with(context).load(list.get(position % list.size()).getImageUrl())
                 .centerCrop()
-//                .placeholder(R.mipmap.ic_launcher)
-//                .error(R.mipmap.ic_launcher)
+                .placeholder(defaultImageView)
+                .error(errorImageView)
                 .into(imageView);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.onItemClick(position);
+                listener.onItemClick(position % list.size());
             }
         });
         container.addView(view);
@@ -72,5 +75,13 @@ public class LoopViewAdapter extends PagerAdapter {
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
+    }
+
+    public void setDefaultImageView(int defaultImageView) {
+        this.defaultImageView = defaultImageView;
+    }
+
+    public void setErrorImageView(int errorImageView) {
+        this.errorImageView = errorImageView;
     }
 }

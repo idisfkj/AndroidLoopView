@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
         loopView = (LoopView) findViewById(R.id.loop_view);
         loopViewNoDesR = (LoopView) findViewById(R.id.loop_view_no_des_r);
         loopViewNoDesC = (LoopView) findViewById(R.id.loop_view_no_des_c);
+        loopView.setDefaultImageView(R.mipmap.ic_launcher);
+        loopView.setErrorImageView(R.mipmap.ic_launcher);
         for (int i = 0; i < urls.length; i++) {
             LoopViewEntity entity = new LoopViewEntity();
             entity.setImageUrl(urls[i]);

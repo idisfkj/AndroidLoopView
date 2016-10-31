@@ -36,7 +36,6 @@ public class LoopView extends FrameLayout implements ViewPager.OnPageChangeListe
     protected TextView descript;
     protected List<LoopViewEntity> list = new ArrayList<>();
     protected LoopViewAdapter adapter;
-    protected boolean isChanged;
     protected int mCurrentPos;
     protected ScheduledExecutorService mSes;
     protected OnItemClickListener listener;
@@ -44,9 +43,8 @@ public class LoopView extends FrameLayout implements ViewPager.OnPageChangeListe
     protected int bottomStyle;
     protected static final int DEF_RATE = 3;
     protected static final int DEF_BOTTOM_STYLE = 1;
-    protected static final int SCROLL_COMPLETELY = 0;
-    protected static final int SCROLL_NO_SELECT = 1;
-    protected static final int SCROLL_SELECTED = 2;
+    protected int defaultImageView;
+    protected int errorImageView;
 
     public LoopView(Context context) {
         this(context, null);
@@ -61,6 +59,7 @@ public class LoopView extends FrameLayout implements ViewPager.OnPageChangeListe
         TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.LoopView);
         rate = typedArray.getInteger(R.styleable.LoopView_rate, DEF_RATE);
         bottomStyle = typedArray.getInteger(R.styleable.LoopView_bottom_style, DEF_BOTTOM_STYLE);
+        typedArray.recycle();
         init(context);
     }
 
@@ -72,6 +71,14 @@ public class LoopView extends FrameLayout implements ViewPager.OnPageChangeListe
         descript = (TextView) findViewById(R.id.descript);
         viewPager.addOnPageChangeListener(this);
         viewPager.setOnTouchListener(this);
+    }
+
+    public void setDefaultImageView(int defaultImageView) {
+        this.defaultImageView = defaultImageView;
+    }
+
+    public void setErrorImageView(int errorImageView) {
+        this.errorImageView = errorImageView;
     }
 
     public void setLoopData(List<LoopViewEntity> loopData) {
@@ -104,6 +111,12 @@ public class LoopView extends FrameLayout implements ViewPager.OnPageChangeListe
         viewPager.setAdapter(adapter);
         linearLayout.getChildAt(0).setSelected(true);
         descript.setText(list.get(0).getDescript());
+
+        if (defaultImageView != 0)
+            adapter.setDefaultImageView(defaultImageView);
+        if (errorImageView != 0)
+            adapter.setErrorImageView(errorImageView);
+        viewPager.setCurrentItem(list.size() * (Integer.MAX_VALUE / 1000));
         startLoop();
     }
 
@@ -116,9 +129,9 @@ public class LoopView extends FrameLayout implements ViewPager.OnPageChangeListe
     public void onPageSelected(int position) {
         mCurrentPos = position;
         if (bottomStyle == getResources().getInteger(R.integer.loop_have_descript))
-            descript.setText(list.get(position).getDescript());
+            descript.setText(list.get(position % list.size()).getDescript());
         for (int i = 0; i < linearLayout.getChildCount(); i++) {
-            if (i == position)
+            if (i == position % list.size())
                 linearLayout.getChildAt(i).setSelected(true);
             else
                 linearLayout.getChildAt(i).setSelected(false);
@@ -127,22 +140,6 @@ public class LoopView extends FrameLayout implements ViewPager.OnPageChangeListe
 
     @Override
     public void onPageScrollStateChanged(int state) {
-        switch (state) {
-            case SCROLL_COMPLETELY:
-                if (viewPager.getCurrentItem() == list.size() - 1 && !isChanged) {
-                    viewPager.setCurrentItem(0);
-                }
-                if (viewPager.getCurrentItem() == 0 && !isChanged) {
-                    viewPager.setCurrentItem(list.size() - 1);
-                }
-                break;
-            case SCROLL_NO_SELECT:
-                isChanged = false;
-                break;
-            case SCROLL_SELECTED:
-                isChanged = true;
-                break;
-        }
 
     }
 
@@ -166,7 +163,7 @@ public class LoopView extends FrameLayout implements ViewPager.OnPageChangeListe
         @Override
         public void run() {
             synchronized (this) {
-                mCurrentPos = (mCurrentPos + 1) % list.size();
+                mCurrentPos++;
                 mHandler.obtainMessage().sendToTarget();
             }
         }
