@@ -23,7 +23,7 @@
             android:id="@+id/loop_view"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            loop:bottom_style="@integer/loop_have_descript"
+            loop:bottom_style="@integer/loop_have_description"
             loop:rate="3">
 
         </com.idisfkj.loopview.LoopView>
@@ -39,7 +39,7 @@
             android:id="@+id/loop_view_no_des_r"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            loop:bottom_style="@integer/loop_no_descript_right"
+            loop:bottom_style="@integer/loop_no_description_right"
             loop:rate="4">
 
         </com.idisfkj.loopview.LoopView>
@@ -55,7 +55,7 @@
             android:id="@+id/loop_view_no_des_c"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            loop:bottom_style="@integer/loop_no_descript_center"
+            loop:bottom_style="@integer/loop_no_description_center"
             loop:rate="5">
 
         </com.idisfkj.loopview.LoopView>

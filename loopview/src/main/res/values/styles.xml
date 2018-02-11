@@ -4,7 +4,7 @@
         <attr name="bottom_style" format="integer|reference"></attr>
     </declare-styleable>
 
-    <integer name="loop_have_descript">1</integer>
-    <integer name="loop_no_descript_right">2</integer>
-    <integer name="loop_no_descript_center">3</integer>
+    <integer name="loop_have_description">1</integer>
+    <integer name="loop_no_description_right">2</integer>
+    <integer name="loop_no_description_center">3</integer>
 </resources>

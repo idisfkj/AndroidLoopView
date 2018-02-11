@@ -21,7 +21,7 @@
             android:background="@color/descript_color">
 
             <LinearLayout
-                android:id="@+id/linear_circler"
+                android:id="@+id/linear_circle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -32,7 +32,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/linear_circler_no"
+                android:id="@+id/linear_circle_no"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -43,13 +43,13 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/descript"
+                android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentBottom="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
-                android:layout_toLeftOf="@id/linear_circler"
+                android:layout_toLeftOf="@id/linear_circle"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:lines="1"
