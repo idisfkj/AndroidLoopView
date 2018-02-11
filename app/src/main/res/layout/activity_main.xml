@@ -12,11 +12,11 @@
         android:orientation="vertical">
 
         <TextView
-            android:padding="5dp"
-            android:layout_gravity="center"
-            android:text="有描述"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="5dp"
+            android:text="有描述" />
 
 
         <com.idisfkj.loopview.LoopView
@@ -24,16 +24,36 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             loop:bottom_style="@integer/loop_have_description"
+            loop:indicator_space="@dimen/activity_horizontal_margin"
             loop:rate="3">
 
         </com.idisfkj.loopview.LoopView>
 
         <TextView
-            android:padding="5dp"
-            android:layout_gravity="center"
-            android:text="无描述,显示居右"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="5dp"
+            android:text="无描述,显示居右" />
+
+        <com.idisfkj.loopview.LoopView
+            android:id="@+id/loop_view_no_des_l"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            loop:bottom_background="@android:color/transparent"
+            loop:bottom_height="60dp"
+            loop:bottom_style="@integer/loop_no_description_left"
+            loop:indicator_margin="20dp"
+            loop:rate="4">
+
+        </com.idisfkj.loopview.LoopView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="5dp"
+            android:text="无描述,显示居右" />
 
         <com.idisfkj.loopview.LoopView
             android:id="@+id/loop_view_no_des_r"
@@ -45,11 +65,11 @@
         </com.idisfkj.loopview.LoopView>
 
         <TextView
-            android:padding="5dp"
-            android:layout_gravity="center"
-            android:text="无描述,显示居中"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="5dp"
+            android:text="无描述,显示居中" />
 
         <com.idisfkj.loopview.LoopView
             android:id="@+id/loop_view_no_des_c"

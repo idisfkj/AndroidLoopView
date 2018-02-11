@@ -1,10 +1,17 @@
 <resources>
     <declare-styleable name="LoopView">
-        <attr name="rate" format="integer"></attr>
-        <attr name="bottom_style" format="integer|reference"></attr>
+        <attr name="rate" format="integer" />
+        <attr name="bottom_style" format="integer|reference" />
+        <attr name="selected_indicator" format="reference" />
+        <attr name="un_selected_indicator" format="reference" />
+        <attr name="indicator_space" format="dimension" />
+        <attr name="indicator_margin" format="dimension" />
+        <attr name="bottom_background" format="color" />
+        <attr name="bottom_height" format="dimension"/>
     </declare-styleable>
 
     <integer name="loop_have_description">1</integer>
-    <integer name="loop_no_description_right">2</integer>
-    <integer name="loop_no_description_center">3</integer>
+    <integer name="loop_no_description_left">2</integer>
+    <integer name="loop_no_description_right">3</integer>
+    <integer name="loop_no_description_center">4</integer>
 </resources>

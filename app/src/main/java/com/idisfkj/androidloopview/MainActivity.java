@@ -13,9 +13,11 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     public LoopView loopView;
+    public LoopView loopViewNoDesL;
     public LoopView loopViewNoDesR;
     public LoopView loopViewNoDesC;
     public List<LoopViewEntity> list = new ArrayList<>();
+    public List<LoopViewEntity> list_no_l = new ArrayList<>();
     public List<LoopViewEntity> list_no_r = new ArrayList<>();
     public List<LoopViewEntity> list_no_c = new ArrayList<>();
     public String[] urls = new String[]{"http://upload.cankaoxiaoxi.com/2016/0808/1470616024923.jpg"
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         loopView = (LoopView) findViewById(R.id.loop_view);
+        loopViewNoDesL = (LoopView) findViewById(R.id.loop_view_no_des_l);
         loopViewNoDesR = (LoopView) findViewById(R.id.loop_view_no_des_r);
         loopViewNoDesC = (LoopView) findViewById(R.id.loop_view_no_des_c);
         loopView.setDefaultImageView(R.mipmap.ic_launcher);
@@ -55,6 +58,23 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        for (int i = 0; i < urls.length - 1; i++) {
+            LoopViewEntity entity = new LoopViewEntity();
+            entity.setImageUrl(urls[i]);
+            entity.setDescript(descripts[i]);
+            list_no_l.add(entity);
+        }
+        loopViewNoDesL.setLoopData(list_no_l);
+        loopViewNoDesL.setOnItemClickListener(new LoopView.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Intent intent = new Intent(MainActivity.this, ItemDetailActivity.class);
+                intent.putExtra("url", detailUrls[position]);
+                startActivity(intent);
+            }
+        });
+
         for (int i = 0; i < urls.length - 1; i++) {
             LoopViewEntity entity = new LoopViewEntity();
             entity.setImageUrl(urls[i]);

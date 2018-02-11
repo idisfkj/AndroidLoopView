@@ -2,9 +2,13 @@ package com.idisfkj.loopview;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.drawable.StateListDrawable;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.ColorInt;
+import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -14,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.idisfkj.loopview.adapter.LoopViewAdapter;
@@ -36,21 +41,27 @@ import java.util.concurrent.TimeUnit;
 public class LoopView extends FrameLayout implements View.OnTouchListener {
     protected ViewPager viewPager;
     protected LinearLayout linearCircle;
-    protected LinearLayout linearCircleNo;
-    protected LinearLayout linearLayout;
     protected TextView description;
+    protected RelativeLayout bottomLayout;
     protected List<LoopViewEntity> list = new ArrayList<>();
     protected LoopViewAdapter adapter;
     protected int mCurrentPos;
-    private ScheduledExecutorService mSes;
-    private ScheduledFuture<?> mScheduledFuture;
     protected OnItemClickListener listener;
-    protected int rate;
-    protected int bottomStyle;
     protected static final int DEF_RATE = 3;
     protected static final int DEF_BOTTOM_STYLE = 1;
     protected int defaultImageView;
     protected int errorImageView;
+
+    private int mBottomStyle;
+    private int mBottomBackground;
+    private int mBottomHeight;
+    private int mRate;
+    private int mSelectedIndicator;
+    private int mUnSelectedIndicator;
+    private int mIndicatorSpace;
+    private int mIndicatorMargin;
+    private ScheduledFuture<?> mScheduledFuture;
+    private ScheduledExecutorService mSes;
     private InnerHandler mHandler = new InnerHandler(this);
 
     public LoopView(Context context) {
@@ -64,8 +75,14 @@ public class LoopView extends FrameLayout implements View.OnTouchListener {
     public LoopView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.LoopView);
-        rate = typedArray.getInteger(R.styleable.LoopView_rate, DEF_RATE);
-        bottomStyle = typedArray.getInteger(R.styleable.LoopView_bottom_style, DEF_BOTTOM_STYLE);
+        mRate = typedArray.getInteger(R.styleable.LoopView_rate, DEF_RATE);
+        mBottomStyle = typedArray.getInteger(R.styleable.LoopView_bottom_style, DEF_BOTTOM_STYLE);
+        mBottomBackground = typedArray.getColor(R.styleable.LoopView_bottom_background, ContextCompat.getColor(context, R.color.description_color));
+        mBottomHeight = typedArray.getDimensionPixelSize(R.styleable.LoopView_bottom_height, getResources().getDimensionPixelSize(R.dimen.bottom_height));
+        mSelectedIndicator = typedArray.getResourceId(R.styleable.LoopView_selected_indicator, R.drawable.circler_hover);
+        mUnSelectedIndicator = typedArray.getResourceId(R.styleable.LoopView_un_selected_indicator, R.drawable.circler);
+        mIndicatorSpace = typedArray.getDimensionPixelSize(R.styleable.LoopView_indicator_space, 2);
+        mIndicatorMargin = typedArray.getDimensionPixelSize(R.styleable.LoopView_indicator_margin, 10);
         typedArray.recycle();
         init(context);
     }
@@ -74,20 +91,22 @@ public class LoopView extends FrameLayout implements View.OnTouchListener {
         LayoutInflater.from(context).inflate(R.layout.loopview_layout, this, true);
         viewPager = (ViewPager) findViewById(R.id.loopView);
         linearCircle = (LinearLayout) findViewById(R.id.linear_circle);
-        linearCircleNo = (LinearLayout) findViewById(R.id.linear_circle_no);
         description = (TextView) findViewById(R.id.description);
-        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
+        bottomLayout = (RelativeLayout) findViewById(R.id.bottom_layout);
+        bottomLayout.setBackgroundColor(mBottomBackground);
+        bottomLayout.getLayoutParams().height = mBottomHeight;
+        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 mCurrentPos = position;
-                if (bottomStyle == getResources().getInteger(R.integer.loop_have_description)) {
+                if (mBottomStyle == getResources().getInteger(R.integer.loop_have_description)) {
                     description.setText(list.get(position % list.size()).getDescript());
                 }
-                for (int i = 0; i < linearLayout.getChildCount(); i++) {
+                for (int i = 0; i < linearCircle.getChildCount(); i++) {
                     if (i == position % list.size()) {
-                        linearLayout.getChildAt(i).setSelected(true);
+                        linearCircle.getChildAt(i).setSelected(true);
                     } else {
-                        linearLayout.getChildAt(i).setSelected(false);
+                        linearCircle.getChildAt(i).setSelected(false);
                     }
                 }
             }
@@ -106,26 +125,16 @@ public class LoopView extends FrameLayout implements View.OnTouchListener {
     public void setLoopData(List<LoopViewEntity> loopData) {
         list = loopData;
         linearCircle.removeAllViews();
-        linearCircleNo.removeAllViews();
         mCurrentPos = 0;
         shutdown();
         for (int i = 0; i < loopData.size(); i++) {
             ImageView imageView = new ImageView(getContext());
-            imageView.setImageResource(R.drawable.loop_circler_bg);
+            imageView.setImageDrawable(createDrawableSelector());
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.leftMargin = 2;
-            if (bottomStyle != DEF_BOTTOM_STYLE) {
-                description.setVisibility(GONE);
-            }
-            if (bottomStyle == getResources().getInteger(R.integer.loop_no_description_center)) {
-                linearCircle.setVisibility(GONE);
-                linearCircleNo.setVisibility(VISIBLE);
-                linearLayout = linearCircleNo;
-            } else {
-                linearLayout = linearCircle;
-            }
+            params.leftMargin = mIndicatorSpace;
             imageView.setLayoutParams(params);
-            linearLayout.addView(imageView);
+            refreshBottomStyle();
+            linearCircle.addView(imageView);
         }
         adapter = new LoopViewAdapter(getContext(), list);
         adapter.setOnItemClickListener(new LoopViewAdapter.OnItemClickListener() {
@@ -135,7 +144,7 @@ public class LoopView extends FrameLayout implements View.OnTouchListener {
             }
         });
         viewPager.setAdapter(adapter);
-        linearLayout.getChildAt(0).setSelected(true);
+        linearCircle.getChildAt(0).setSelected(true);
         description.setText(list.get(0).getDescript());
 
         if (defaultImageView != 0) {
@@ -146,6 +155,35 @@ public class LoopView extends FrameLayout implements View.OnTouchListener {
         }
         viewPager.setCurrentItem(list.size() * (Integer.MAX_VALUE / 1000));
         startLoop();
+    }
+
+    private StateListDrawable createDrawableSelector() {
+        StateListDrawable stateListDrawable = new StateListDrawable();
+        stateListDrawable.addState(new int[]{android.R.attr.state_selected}, ContextCompat.getDrawable(getContext(), mSelectedIndicator));
+        stateListDrawable.addState(new int[]{-android.R.attr.state_selected}, ContextCompat.getDrawable(getContext(), mUnSelectedIndicator));
+        return stateListDrawable;
+    }
+
+    private void refreshBottomStyle() {
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) linearCircle.getLayoutParams();
+        if (mBottomStyle != DEF_BOTTOM_STYLE) {
+            description.setVisibility(GONE);
+            params.addRule(RelativeLayout.CENTER_IN_PARENT, 0);
+            params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, 0);
+            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 0);
+            if (mBottomStyle == getResources().getInteger(R.integer.loop_no_description_center)) {
+                params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+            } else if (mBottomStyle == getResources().getInteger(R.integer.loop_no_description_left)) {
+                params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
+                params.leftMargin = mIndicatorMargin;
+            } else if (mBottomStyle == getResources().getInteger(R.integer.loop_no_description_right)) {
+                params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
+                params.rightMargin = mIndicatorMargin;
+            }
+        } else {
+            params.rightMargin = mIndicatorMargin;
+        }
+        linearCircle.setLayoutParams(params);
     }
 
     @Override
@@ -166,7 +204,7 @@ public class LoopView extends FrameLayout implements View.OnTouchListener {
 
     protected void startLoop() {
         mSes = createExecutor();
-        mScheduledFuture = mSes.scheduleAtFixedRate(new AutoRunnable(), rate, rate, TimeUnit.SECONDS);
+        mScheduledFuture = mSes.scheduleAtFixedRate(new AutoRunnable(), mRate, mRate, TimeUnit.SECONDS);
     }
 
     protected void pauseLoop() {
@@ -249,5 +287,37 @@ public class LoopView extends FrameLayout implements View.OnTouchListener {
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
+    }
+
+    public void setBottomStyle(int bottomStyle) {
+        this.mBottomStyle = bottomStyle;
+    }
+
+    public void setBottomBackground(@ColorInt int bottomBackground) {
+        this.mBottomBackground = bottomBackground;
+    }
+
+    public void setBottomHeight(int bottomHeight) {
+        this.mBottomHeight = bottomHeight;
+    }
+
+    public void setRate(int rate) {
+        this.mRate = rate;
+    }
+
+    public void setSelectedIndicator(@IdRes int selectedIndicator) {
+        this.mSelectedIndicator = selectedIndicator;
+    }
+
+    public void setUnSelectedIndicator(@IdRes int unSelectedIndicator) {
+        this.mUnSelectedIndicator = unSelectedIndicator;
+    }
+
+    public void setIndicatorSpace(int indicatorSpace) {
+        this.mIndicatorSpace = indicatorSpace;
+    }
+
+    public void setIndicatorMargin(int indicatorMargin) {
+        this.mIndicatorMargin = indicatorMargin;
     }
 }

@@ -10,15 +10,14 @@
         <android.support.v4.view.ViewPager
             android:id="@+id/loopView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </android.support.v4.view.ViewPager>
+            android:layout_height="match_parent" />
 
         <RelativeLayout
+            android:id="@+id/bottom_layout"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_alignParentBottom="true"
-            android:background="@color/descript_color">
+            android:background="@color/description_color">
 
             <LinearLayout
                 android:id="@+id/linear_circle"
@@ -26,19 +25,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="10dp"
                 android:orientation="horizontal">
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/linear_circle_no"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_centerVertical="true"
-                android:orientation="horizontal"
-                android:visibility="gone">
 
             </LinearLayout>
 
