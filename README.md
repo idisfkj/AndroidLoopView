@@ -12,7 +12,7 @@
 <dependency>
   <groupId>com.idisfkj.loopview</groupId>
   <artifactId>loopview</artifactId>
-  <version>2.0.0</version>
+  <version>2.1.0</version>
   <type>pom</type>
 </dependency>
 ```
@@ -20,7 +20,7 @@
 ### Gradle
 
 ```
-compile 'com.idisfkj.loopview:loopview:2.0.0'
+compile 'com.idisfkj.loopview:loopview:2.1.0'
 ```
 
 >*根据自己的需求添加依赖*
@@ -34,22 +34,37 @@ xmlns:loop="http://schemas.android.com/apk/res-auto"
 引用`LoopView`控件
 
 ```
-<com.idisfkj.loopview.LoopView
+        <com.idisfkj.loopview.LoopView
             android:id="@+id/loop_view"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            loop:bottom_style="@integer/loop_have_descript"
+            loop:bottom_style="@integer/loop_have_description"
+            loop:indicator_space="@dimen/activity_horizontal_margin"
+            loop:selected_indicator="@drawable/circler_hover"
+            loop:un_selected_indicator="@drawable/circler"
+            loop:bottom_background="@color/description_color"
+            loop:bottom_height="@dimen/bottom_height"
+            loop:indicator_margin="@dimen/activity_horizontal_margin"
             loop:rate="3">
-</com.idisfkj.loopview.LoopView>
+
+        </com.idisfkj.loopview.LoopView>
 ```
 
 `bottom_style`代表`LoopView`底部样式，有三个可选值,默认为`loop_have_descript`
 
 * loop_have_descript 代表有描述的布局
+* loop_no_description_left 代表没有描述且圆点居左的布局
 * loop_no_descript_right 代表没有描述且圆点居右的布局
 * loop_no_descript_center 代表没有描述且圆点居中的布局
 
 `rate`代表轮播的速度，`单位为s`,默认为3s
+`selected_indicator`代表选中的指示器样式
+`un_selected_indicator`代表未选中的指示器样式
+`indicator_space`代表指示器间的间距
+`indicator_margin`代表指示器整体`margin`
+`bottom_background`代表有描述时的渐变背景色
+`bottom_height`代表底部布局的高度
+
 
 ## 设置默认图片
 
